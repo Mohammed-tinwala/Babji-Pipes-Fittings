@@ -3,6 +3,7 @@ import { Mail, MapPin, Github, Linkedin, Twitter, Send, MessageSquare, Phone } f
 import FadeIn from '../animations/FadeIn';
 import { COMPANY_INFO, SOCIAL_LINKS } from '../../utils/constants';
 import { FaWhatsappSquare } from 'react-icons/fa';
+import axios from 'axios';
 
 const Contact = () => {
 
@@ -15,6 +16,7 @@ const Contact = () => {
     });
 
     const [status, setStatus] = useState({ type: '', message: '' })
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (e) => {
         setFormData({
@@ -23,48 +25,72 @@ const Contact = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const { fullname, email, phone, subject, message } = formData;
 
-        // Basic validation
         if (!fullname || !email || !phone || !subject || !message) {
-            setStatus({ type: 'error', message: 'Please fill in all required fields.' });
+            setStatus({
+                type: "error",
+                message: "Please fill in all required fields.",
+            });
             return;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setStatus({ type: 'error', message: 'Please enter a valid email address.' });
-            return;
+        setLoading(true);   // START LOADING
+
+        try {
+            const response = await axios.post(
+                "https://babjibestpipes.com/mobileapis/addContactForm.php",
+                {
+                    name: fullname,
+                    email: email,
+                    phone: phone,
+                    subject: subject,
+                    message: message,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (response.data.status === true || response.data.status === 1) {
+                setStatus({
+                    type: "success",
+                    message:
+                        "Your enquiry has been submitted successfully. Our team will contact you shortly.",
+                });
+
+                setFormData({
+                    fullname: "",
+                    email: "",
+                    phone: "",
+                    subject: "",
+                    message: "",
+                });
+            } else {
+                setStatus({
+                    type: "error",
+                    message: "Something went wrong. Please try again.",
+                });
+            }
+        } catch (error) {
+            console.error("Contact API error:", error);
+
+            setStatus({
+                type: "error",
+                message: "Server error. Please try again later.",
+            });
         }
 
-        // Phone validation (basic)
-        const phoneRegex = /^[0-9+\-\s]{8,15}$/;
-        if (!phoneRegex.test(phone)) {
-            setStatus({ type: 'error', message: 'Please enter a valid phone number.' });
-            return;
-        }
+        setLoading(false); // STOP LOADING
 
-        // Success
-        setStatus({
-            type: 'success',
-            message: 'Your enquiry has been submitted successfully. Our team will contact you shortly.',
-        });
-
-        // Reset form
-        setFormData({
-            fullname: '',
-            email: '',
-            phone: '',
-            subject: '',
-            message: '',
-        });
-
-        // Clear status after 5s
-        setTimeout(() => setStatus({ type: '', message: '' }), 5000);
+        setTimeout(() => {
+            setStatus({ type: "", message: "" });
+        }, 5000);
     };
 
     const socialIcons = {
@@ -193,10 +219,13 @@ const Contact = () => {
                                 {/* Submit Button */}
                                 <button
                                     type='submit'
-                                    className='w-full px-6 py-3 bg-linear-to-r from-primary/10 to-primary text-white font-medium rounded-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 flex items-center justify-center gap-2 group'
+                                    disabled={loading}
+                                    className='w-full px-6 py-3 bg-linear-to-r from-primary/10 to-primary text-white font-medium rounded-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-70'
                                 >
-                                    <span>Send Enquiry</span>
-                                    <Send className='w-5 h-5 group-hover:translate-x-1 transition-transform duration-300' />
+                                    <span>{loading ? "Sending..." : "Send Enquiry"}</span>
+                                    {!loading && (
+                                        <Send className='w-5 h-5 group-hover:translate-x-1 transition-transform duration-300' />
+                                    )}
                                 </button>
 
                                 {/* Status Message */}

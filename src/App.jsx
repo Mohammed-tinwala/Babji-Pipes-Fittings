@@ -1,30 +1,34 @@
-import React from 'react'
-import Navbar from './components/Layout/Navbar';
-import Hero from './components/sections/Hero';
-import About from './components/sections/About';
-import Categories from './components/sections/Categories';
-import Products from './components/sections/Products';
-import Testimonials from './components/sections/Testimonials';
-import Contact from './components/sections/Contact';
-import Footer from './components/Layout/Footer';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Layout/Navbar";
+import Footer from "./components/Layout/Footer";
+import Home from "./pages/HomePage";
+import CategoryProductPage from './pages/CategoryProductPage'
+import ProductDetail from "./pages/ProductDetail";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const App = () => {
   return (
-    <div className='min-h-screen bg-black'>
-      <Navbar />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="min-h-screen bg-black">
 
-      <main>
-        <Hero />
-        <About />
-        <Categories />
-        <Products />
-        <Testimonials />
-        <Contact />
-      </main>
+        <Navbar />
 
-      <Footer />
-    </div>
-  )
-}
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path='/category/:id' element={<CategoryProductPage />} />
+            <Route path='/product/:id' element={<ProductDetail />} />
+          </Routes>
+        </main>
 
-export default App
+        <Footer />
+
+      </div>
+    </BrowserRouter>
+  );
+};
+
+export default App;

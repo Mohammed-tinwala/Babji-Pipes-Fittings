@@ -69,15 +69,15 @@ const About = () => {
                             </div>
                         </FadeIn>
 
-                        <FadeIn delay={400}>
+                        {/* <FadeIn delay={400}>
                             <button
                                 onClick={() => window.open(COMPANY_INFO.resume, '_blank')}
                                 className='inline-flex items-center gap-3 bg-white hover:bg-white/90 text-black text-base font-medium px-8 py-4 rounded-full transition-all duration-300 w-fit cursor-pointer group'
                             >
-                                {/* <Download className='w-5 h-5 group-hover:translate-y-0.5 transition transform duration-300' /> */}
+                                <Download className='w-5 h-5 group-hover:translate-y-0.5 transition transform duration-300' />
                                 Learn More
                             </button>
-                        </FadeIn>
+                        </FadeIn> */}
                     </div>
 
                     {/* Right Column - Info Grid  */}

@@ -26,7 +26,7 @@ export const products = [
         title: "GI Threaded Elbow 90 Degree",
         description: "Galvanized iron 90° threaded elbow designed for durable plumbing and industrial pipe connections with corrosion resistance.",
         image: "/images/products/gi-elbow-90.png",
-        category: "GI Pipe Fittings",
+        category: "Pipe Fittings",
         material: "Galvanized Iron",
         metrics: "BSP / NPT Thread",
         catalogUrl: "/catalogs/gi-fittings.pdf",
@@ -69,7 +69,7 @@ export const products = [
 
 export const categories = [
     "All",
-    "Ball Valves",
+    "SS Ball Valves",
     "Butterfly Valves",
     "Pipe Fittings",
     "Brass Fittings",
